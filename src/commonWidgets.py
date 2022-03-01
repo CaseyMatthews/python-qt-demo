@@ -2,7 +2,7 @@ import sys
 from PySide2.QtWidgets import (
     QMainWindow, QApplication,
     QLabel, QCheckBox, QComboBox, QListWidget, QLineEdit,
-    QLineEdit, QSpinBox, QDoubleSpinBox, QSlider
+    QLineEdit, QSpinBox, QDoubleSpinBox, QSlider, QDial
 )
 from PySide2.QtGui import QPixmap
 from PySide2.QtCore import Qt
@@ -14,7 +14,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Common Widgets")
 
-        widget = self.lineEdit_widget()
+        widget = self.dial_widget()
+
         self.setCentralWidget(widget)
 
     def label_widget(self):
@@ -66,6 +67,12 @@ class MainWindow(QMainWindow):
         print("text edited...")
         print(s)
 
+    def value_changed(self, i):
+        print(i)
+
+    def value_changed_str(self, s):
+        print(s)
+
     def list_widget(self):
         widget = QListWidget()
         widget.addItems(['one', 'two', 'three'])
@@ -85,6 +92,50 @@ class MainWindow(QMainWindow):
         widget.textEdited.connect(self.text_edited)
 
         return widget
+
+    def spinbox_widget(self):
+        widget = QSpinBox()
+        widget.setMinimum(-10)
+        widget.setMaximum(3)
+        widget.setPrefix("$")
+        widget.setSuffix("c")
+        widget.setSingleStep(3)
+        widget.valueChanged.connect(self.value_changed)
+        widget.textChanged.connect(self.value_changed_str)
+
+        return widget
+
+    def slider_widget(self):
+        widget = QSlider()
+        widget.setMinimum(-10)
+        widget.setMaximum(10)
+        widget.setSingleStep(3)
+        widget.valueChanged.connect(self.value_changed)
+        widget.sliderMoved.connect(self.slider_position)
+        widget.sliderPressed.connect(self.slider_pressed)
+        widget.sliderReleased.connect(self.slider_released)
+        
+        return widget
+
+    def slider_position(self, p):
+        print("position", p)
+        
+    def slider_pressed(self):
+        print("pressed!")
+
+    def slider_released(self):
+        print("released")
+
+    def dial_widget(self):
+        widget = QDial()
+        widget.setRange(-10,100)
+        widget.setSingleStep(0.5)
+        widget.valueChanged.connect(self.value_changed)
+        widget.sliderMoved.connect(self.slider_position)
+        widget.sliderPressed.connect(self.slider_pressed)
+        widget.sliderReleased.connect(self.slider_released)
+        return widget
+        
 
 
 app = QApplication(sys.argv)
