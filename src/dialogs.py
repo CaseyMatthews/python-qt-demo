@@ -1,6 +1,6 @@
 import sys
 
-from PySide2.QtWidgets import QApplication, QMainWindow, QPushButton, QDialog, QDialogButtonBox, QVBoxLayout, QLabel
+from PySide2.QtWidgets import QApplication, QMainWindow, QPushButton, QDialog, QDialogButtonBox, QVBoxLayout, QLabel, QMessageBox
 
 class MainWindow(QMainWindow):
 
@@ -14,10 +14,16 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(button)
 
     def button_clicked(self, s):
-        print("click", s)
+        
+        button = QMessageBox.critical(
+            self,
+            "Question Dialog",
+            "The Longer Message",
+            buttons=QMessageBox.Discard | QMessageBox.NoToAll | QMessageBox.Ignore,
+            defaultButton=QMessageBox.Discard
+        )
 
-        dlg = CustomDialog()
-        if dlg.exec_():
+        if button == QMessageBox.Yes:
             print("Success!")
         else:
             print("Cancel!")
